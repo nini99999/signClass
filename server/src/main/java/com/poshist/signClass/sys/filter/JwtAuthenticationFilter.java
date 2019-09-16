@@ -6,6 +6,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.poshist.signClass.common.vo.BaseVO;
+
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -31,11 +34,23 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
             chain.doFilter(req, res);
             return;
         }
+		try {
+			UsernamePasswordAuthenticationToken authentication = getAuthentication(req);
 
-        UsernamePasswordAuthenticationToken authentication = getAuthentication(req);
-
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        chain.doFilter(req, res);
+			SecurityContextHolder.getContext().setAuthentication(authentication);
+			chain.doFilter(req, res);
+		} catch (Exception e) {
+//			e.printStackTrace();
+			BaseVO vo = new BaseVO();
+			vo.setStatus("0002");
+			vo.setMsg(e.getMessage());
+			
+			res.setContentType("application/json;charset=utf-8");
+            res.setHeader("Access-Control-Allow-Credentials", "true");
+            res.setHeader("Access-Control-Allow-Origin", ((HttpServletRequest) req).getHeader("Origin"));
+       
+			res.getWriter().write(new ObjectMapper().writeValueAsString(vo));
+		}
     }
 
     private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request) {
