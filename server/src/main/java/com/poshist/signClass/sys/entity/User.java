@@ -17,6 +17,7 @@ public class User extends AbstractEntity {
     private String mobile;
     private String email;
     @OneToOne
+    @JoinColumn(name = "department_id",referencedColumnName = "id")
     private Department department;
     @OneToMany( cascade=CascadeType.ALL,orphanRemoval=true,mappedBy = "user")
 

@@ -961,7 +961,7 @@
               "chnname": "名称"
             },
             {
-              "name": "adress",
+              "name": "address",
               "type": "DefaultString",
               "remark": "",
               "chnname": "地址"
@@ -1205,6 +1205,214 @@
             }
           ],
           "chnname": "座位表"
+        },
+        {
+          "title": "t_ps_custom",
+          "fields": [
+            {
+              "name": "id",
+              "type": "id",
+              "remark": "",
+              "chnname": "主键"
+            },
+            {
+              "name": "name",
+              "type": "Name",
+              "remark": "",
+              "chnname": "名称"
+            },
+            {
+              "name": "mobile",
+              "type": "mobile",
+              "remark": "",
+              "chnname": "电话"
+            },
+            {
+              "name": "chat_code",
+              "type": "Name",
+              "remark": "",
+              "chnname": "微信"
+            },
+            {
+              "name": "balance",
+              "type": "Money",
+              "remark": "",
+              "chnname": "余额"
+            },
+            {
+              "name": "frozen",
+              "type": "Money",
+              "remark": "",
+              "chnname": "冻结金额"
+            },
+            {
+              "name": "reg_time",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "注册日期"
+            },
+            {
+              "name": "stauts",
+              "type": "status",
+              "remark": "",
+              "chnname": "状态"
+            }
+          ],
+          "indexs": [],
+          "headers": [
+            {
+              "fieldName": "chnname",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "name",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "type",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "remark",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "pk",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "autoIncrement",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "defaultValue",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "relationNoShow",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "uiHint",
+              "relationNoShow": true
+            }
+          ],
+          "chnname": "客户表"
+        },
+        {
+          "title": "t_ps_flow",
+          "fields": [
+            {
+              "name": "id",
+              "type": "id",
+              "remark": "",
+              "chnname": "主键"
+            },
+            {
+              "name": "before_balance",
+              "type": "Money",
+              "remark": "",
+              "chnname": "发生前余额"
+            },
+            {
+              "name": "before_frozen",
+              "type": "Money",
+              "remark": "",
+              "chnname": "发生前冻结金额"
+            },
+            {
+              "name": "change",
+              "type": "Money",
+              "remark": "",
+              "chnname": "发生额"
+            },
+            {
+              "name": "after_balance",
+              "type": "Money",
+              "remark": "",
+              "chnname": "发生后余额"
+            },
+            {
+              "name": "after_frozen",
+              "type": "Money",
+              "remark": "",
+              "chnname": "发生后冻结金额"
+            },
+            {
+              "name": "item_id",
+              "type": "id",
+              "remark": "",
+              "chnname": "科目ID"
+            },
+            {
+              "name": "create_user_id",
+              "type": "id",
+              "remark": "",
+              "chnname": "创建人id"
+            },
+            {
+              "name": "create_time",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "创建日期"
+            }
+          ],
+          "indexs": [],
+          "headers": [
+            {
+              "fieldName": "chnname",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "name",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "type",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "remark",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "pk",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "autoIncrement",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "defaultValue",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "relationNoShow",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "uiHint",
+              "relationNoShow": true
+            }
+          ],
+          "chnname": "流水表"
         }
       ],
       "graphCanvas": {
