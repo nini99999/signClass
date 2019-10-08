@@ -371,3 +371,32 @@ sys/initPassword
 ### 3.1.3 返回值
 
 状态码为0000时成功，其他为不成功
+
+
+
+## 3.2 客户登录
+
+### 3.2.1 地址
+
+/ps/customLogin
+
+### 3.2.2 参数
+
+| 参数名   | 类型   | 是否必填 | 说明   |
+| -------- | ------ | -------- | ------ |
+| chatCode | String | 必填     | 微信ID |
+
+### 3.2.3 返回值
+
+状态码为0000时成功，其他为不成功
+
+| 参数名   | 类型   | 说明              |
+| -------- | ------ | ----------------- |
+| id       | Long   | 主键              |
+| name     | String | 名称              |
+| mobile   | String | 手机号            |
+| chatCode | String | 微信ID            |
+| balance  | Double | 剩余金额          |
+| frozen   | Double | 冻结金额          |
+| regTime  | Date   | 注册时间          |
+| status   | int    | 状态 0 有效 1无效 |

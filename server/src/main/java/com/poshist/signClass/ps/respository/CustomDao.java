@@ -5,4 +5,5 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface CustomDao extends CrudRepository<Custom, Long> {
     public Custom getFirstByMobile(String mobile);
+    public Custom getFirstByChatCode(String chatCode);
 }
