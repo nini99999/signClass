@@ -18,7 +18,7 @@ public class ClassInfo extends AbstractEntity {
     @OneToOne
     @JoinColumn(name = "department_id",referencedColumnName = "id")
     private Department department;
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "class_id",referencedColumnName = "id")
     private List<ClassArea> classAreas;
     public String getName() {

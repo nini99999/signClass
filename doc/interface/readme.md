@@ -107,7 +107,7 @@ sys/getUserList
 | departmentId | Long   | 部门id                        |
 | pageSize     | int    | 分页大小                      |
 | pageCount    | int    | 当前页数                      |
-| data         | ·「    | 列表数据		数据格式见2.2 |
+| data         | []     | 列表数据		数据格式见2.2 |
 
 
 
@@ -356,7 +356,7 @@ sys/initPassword
 
 # 3 .用户接口描述
 
-## 3.1 手机号是否有效
+## 3.1 手机号是否存在
 
 ### 3.1.1 地址
 
@@ -370,7 +370,9 @@ sys/initPassword
 
 ### 3.1.3 返回值
 
-状态码为0000时成功，其他为不成功
+| 参数名 | 类型    | 说明                    |
+| ------ | ------- | ----------------------- |
+| data   | boolean | true为存在false为不存在 |
 
 
 
@@ -390,13 +392,40 @@ sys/initPassword
 
 状态码为0000时成功，其他为不成功
 
-| 参数名   | 类型   | 说明              |
-| -------- | ------ | ----------------- |
-| id       | Long   | 主键              |
-| name     | String | 名称              |
-| mobile   | String | 手机号            |
-| chatCode | String | 微信ID            |
-| balance  | Double | 剩余金额          |
-| frozen   | Double | 冻结金额          |
-| regTime  | Date   | 注册时间          |
-| status   | int    | 状态 0 有效 1无效 |
+| 参数名            | 类型   | 说明              |
+| ----------------- | ------ | ----------------- |
+| id                | Long   | 主键              |
+| name              | String | 名称              |
+| mobile            | String | 手机号            |
+| chatCode          | String | 微信ID            |
+| balance           | Double | 剩余金额          |
+| frozen            | Double | 冻结金额          |
+| regTime           | Date   | 注册时间          |
+| status            | int    | 状态 0 有效 1无效 |
+| recommendedMobile | String | 推荐人手机号      |
+
+
+
+## 3.3  查询客户列表
+
+### 3.3.1 地址
+
+/ps/getCustomList
+
+### 3.3.2 参数
+
+| 参数名    | 类型   | 是否必填 | 说明     |
+| --------- | ------ | -------- | -------- |
+| mobile    | String | 非必填   | 手机号   |
+| pageSize  | int    | 必填     | 分页大小 |
+| pageCount | int    | 必填     | 当前页数 |
+
+### 3.2.3 返回值
+
+状态码为0000时成功，其他为不成功
+
+| 参数名    | 类型 | 说明                          |
+| --------- | ---- | ----------------------------- |
+| pageSize  | int  | 分页大小                      |
+| pageCount | int  | 当前页数                      |
+| data      | []   | 列表数据		数据格式见3.2 |

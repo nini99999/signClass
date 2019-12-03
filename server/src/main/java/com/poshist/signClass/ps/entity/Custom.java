@@ -3,9 +3,7 @@ package com.poshist.signClass.ps.entity;
 import com.poshist.signClass.common.entity.AbstractEntity;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity
@@ -18,7 +16,19 @@ public class Custom  extends AbstractEntity {
     private Double balance;
     private Double frozen;
     private Date regTime;
+    //推荐人
+    @OneToOne
+    @JoinColumn(name = "recommended_id",referencedColumnName = "id")
+    private Custom recommended;
     private Integer status;
+
+    public Custom getRecommended() {
+        return recommended;
+    }
+
+    public void setRecommended(Custom recommended) {
+        this.recommended = recommended;
+    }
 
     public Integer getStatus() {
         return status;

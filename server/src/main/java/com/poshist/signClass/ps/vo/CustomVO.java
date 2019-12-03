@@ -1,6 +1,7 @@
 package com.poshist.signClass.ps.vo;
 
 import com.poshist.signClass.ps.entity.Custom;
+import org.springframework.beans.BeanUtils;
 
 import java.util.Date;
 
@@ -13,16 +14,21 @@ public class CustomVO {
     private Double frozen;
     private Date regTime;
     private Integer status;
+    private String recommendedMobile;
     public CustomVO(){}
     public CustomVO(Custom custom){
-        setName(custom.getName());
-        setMobile(custom.getMobile());
-        setChatCode(custom.getChatCode());
-        setBalance(custom.getBalance());
-        setFrozen(custom.getFrozen());
-        setRegTime(custom.getRegTime());
-        setStatus(custom.getStatus());
-        setId(custom.getId());
+        BeanUtils.copyProperties(custom,this);
+        if(null!=custom.getRecommended()){
+            setRecommendedMobile(custom.getRecommended().getMobile());
+        }
+    }
+
+    public String getRecommendedMobile() {
+        return recommendedMobile;
+    }
+
+    public void setRecommendedMobile(String recommendedMobile) {
+        this.recommendedMobile = recommendedMobile;
     }
 
     public Long getId() {

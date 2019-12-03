@@ -14,7 +14,7 @@ import java.util.Date;
 public class Flow extends AbstractEntity {
     private  Double beforeBalance;
     private Double beforeFrozen;
-    private Double change;
+    private Double changeValue;
     private Double afterBalance;
     private Double afterFrozen;
     private Date createTime;
@@ -49,12 +49,12 @@ public class Flow extends AbstractEntity {
         this.beforeFrozen = beforeFrozen;
     }
 
-    public Double getChange() {
-        return change;
+    public Double getChangeValue() {
+        return changeValue;
     }
 
-    public void setChange(Double change) {
-        this.change = change;
+    public void setChangeValue(Double changeValue) {
+        this.changeValue = changeValue;
     }
 
     public Double getAfterBalance() {
