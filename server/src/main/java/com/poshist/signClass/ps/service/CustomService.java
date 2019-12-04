@@ -3,10 +3,14 @@ package com.poshist.signClass.ps.service;
 import com.poshist.signClass.common.utils.CommonUtils;
 import com.poshist.signClass.common.vo.PageVO;
 import com.poshist.signClass.ps.entity.Custom;
+import com.poshist.signClass.ps.entity.RechargeInfo;
 import com.poshist.signClass.ps.respository.CustomDao;
+import com.poshist.signClass.ps.respository.RechargeInfoDao;
 import com.poshist.signClass.ps.vo.CustomVO;
+import com.poshist.signClass.ps.vo.RechargeInfoVO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -19,6 +23,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -27,6 +32,11 @@ import java.util.List;
 public class CustomService {
     @Autowired
     private CustomDao customDao;
+    @Autowired
+    private RechargeInfoDao rechargeInfoDao;
+
+    @Value(("${ps.price}"))
+    private Double price;
     public boolean mobileValid(String mobile){
         Custom custom=customDao.getFirstByMobile(mobile);
         if(null==custom){
@@ -63,5 +73,15 @@ public class CustomService {
         }
         pageVO.setDataCount(page.getTotalElements());
         return pageVO;
+        }
+
+        public void recharge(RechargeInfoVO rechargeInfoVO){
+            RechargeInfo rechargeInfo=new RechargeInfo();
+            rechargeInfo=rechargeInfoVO.toDTO(rechargeInfo);
+            Custom custom=customDao.findById(rechargeInfoVO.getCustomId()).get();
+            rechargeInfo.setCustom(custom);
+            rechargeInfo.setStatus(0);
+            rechargeInfo.setCreateTime(new Date());
+            rechargeInfoDao.save(rechargeInfo);
         }
 }

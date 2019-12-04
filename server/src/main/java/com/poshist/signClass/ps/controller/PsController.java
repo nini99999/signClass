@@ -4,6 +4,7 @@ import com.poshist.signClass.common.vo.BaseVO;
 import com.poshist.signClass.common.vo.PageVO;
 import com.poshist.signClass.ps.service.CustomService;
 import com.poshist.signClass.ps.vo.CustomVO;
+import com.poshist.signClass.ps.vo.RechargeInfoVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,13 +41,21 @@ public class PsController {
 
     @RequestMapping("/getCustomList")
     public BaseVO getCustomList(@RequestBody Map paramMap) {
-        BaseVO baseVO=new BaseVO();
+        BaseVO baseVO = new BaseVO();
         PageVO pageVO = new PageVO(paramMap);
-        CustomVO customVO=new CustomVO();
-        if(null!=paramMap.get("mobile")){
+        CustomVO customVO = new CustomVO();
+        if (null != paramMap.get("mobile")) {
             customVO.setMobile(paramMap.get("mobile").toString());
         }
-        baseVO.setData(customService.getCustomList(pageVO,customVO));
+        baseVO.setData(customService.getCustomList(pageVO, customVO));
         return baseVO;
     }
+
+    @RequestMapping("/recharge")
+    public BaseVO recharge(@RequestBody RechargeInfoVO rechargeInfoVO) {
+        BaseVO baseVO = new BaseVO();
+        customService.recharge(rechargeInfoVO);
+        return baseVO;
+    }
+
 }
