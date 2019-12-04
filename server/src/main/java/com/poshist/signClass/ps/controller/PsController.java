@@ -5,6 +5,7 @@ import com.poshist.signClass.common.vo.PageVO;
 import com.poshist.signClass.ps.service.CustomService;
 import com.poshist.signClass.ps.vo.CustomVO;
 import com.poshist.signClass.ps.vo.RechargeInfoVO;
+import com.poshist.signClass.ps.vo.TagInfoVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -57,5 +58,27 @@ public class PsController {
         customService.recharge(rechargeInfoVO);
         return baseVO;
     }
+
+    @RequestMapping("/addTag")
+    public BaseVO addTag(@RequestBody TagInfoVO tagInfoVO) {
+        BaseVO baseVO = new BaseVO();
+        customService.addTag(tagInfoVO);
+        return baseVO;
+    }
+
+    @RequestMapping("/removeTag")
+    public BaseVO removeTag(@RequestBody TagInfoVO tagInfoVO) {
+        BaseVO baseVO = new BaseVO();
+        customService.removeTag(tagInfoVO);
+        return baseVO;
+    }
+
+    @RequestMapping("/getTagList")
+    public BaseVO getTagList(@RequestBody TagInfoVO tagInfoVO) {
+        BaseVO baseVO = new BaseVO();
+        baseVO.setData(customService.getTagList(tagInfoVO));
+        return baseVO;
+    }
+
 
 }
