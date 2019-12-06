@@ -1,6 +1,7 @@
 package com.poshist.signClass.ps.entity;
 
 import com.poshist.signClass.common.entity.AbstractEntity;
+import com.poshist.signClass.sys.entity.Dictionary;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
@@ -20,6 +21,9 @@ public class Custom  extends AbstractEntity {
     @OneToOne
     @JoinColumn(name = "recommended_id",referencedColumnName = "id")
     private Custom recommended;
+    @OneToOne
+    @JoinColumn(name = "source_id",referencedColumnName = "id")
+    private Dictionary source;
     private Integer status;
 
     public Custom getRecommended() {

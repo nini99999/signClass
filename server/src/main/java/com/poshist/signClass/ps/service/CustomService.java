@@ -1,12 +1,15 @@
 package com.poshist.signClass.ps.service;
 
+import com.poshist.signClass.common.RunTimeException;
 import com.poshist.signClass.common.utils.CommonUtils;
 import com.poshist.signClass.common.vo.PageVO;
 import com.poshist.signClass.ps.entity.Custom;
 import com.poshist.signClass.ps.entity.RechargeInfo;
+import com.poshist.signClass.ps.entity.SignInfo;
 import com.poshist.signClass.ps.entity.TagInfo;
 import com.poshist.signClass.ps.respository.CustomDao;
 import com.poshist.signClass.ps.respository.RechargeInfoDao;
+import com.poshist.signClass.ps.respository.SignInfoDao;
 import com.poshist.signClass.ps.respository.TagInfoDao;
 import com.poshist.signClass.ps.vo.CustomVO;
 import com.poshist.signClass.ps.vo.RechargeInfoVO;
@@ -43,6 +46,8 @@ public class CustomService {
     private TagInfoDao tagInfoDao;
     @Autowired
     private DictionaryDao dictionaryDao;
+    @Autowired
+    private SignInfoDao signInfoDao;
     @Value(("${ps.price}"))
     private Double price;
 
@@ -122,5 +127,33 @@ public class CustomService {
             tagInfoVOS.add(new TagInfoVO(tagInfo));
         }
         return tagInfoVOS;
+    }
+    public String  sign(CustomVO customVO) throws RunTimeException {
+        Custom custom=customDao.getFirstByMobile(customVO.getMobile());
+        if(null==custom){
+            throw new RunTimeException("1001","用户没有注册");
+        }
+        List<RechargeInfo> rechargeInfos=getValidRecharge(custom);
+        if(rechargeInfos.isEmpty()){
+            throw new RunTimeException("1002","用户没有有效余额");
+        }
+        SignInfo signInfo=signInfoDao.getFirstByCustomAndEndTimeIsNull(custom);
+        Date now =new Date();
+        //第一次签到
+        if(null==signInfo){
+            signInfo=new SignInfo();
+            signInfo.setCustom(custom);
+            signInfo.setStartTime(now);
+        }else{
+            signInfo.setEndTime(now);
+            signInfo.setConsumeTime(Long.valueOf(now.getTime()-signInfo.getStartTime().getTime()/1000));
+        }
+        return "0000";
+    }
+
+    public List<RechargeInfo> getValidRecharge(Custom custom){
+        Integer[] status={0,1};
+        List<RechargeInfo> rechargeInfos=rechargeInfoDao.findByStatusInAndCustomOrderById(status,custom);
+        return  rechargeInfos;
     }
 }

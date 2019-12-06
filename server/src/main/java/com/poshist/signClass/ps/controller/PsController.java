@@ -1,5 +1,6 @@
 package com.poshist.signClass.ps.controller;
 
+import com.poshist.signClass.common.RunTimeException;
 import com.poshist.signClass.common.vo.BaseVO;
 import com.poshist.signClass.common.vo.PageVO;
 import com.poshist.signClass.ps.service.CustomService;
@@ -77,6 +78,18 @@ public class PsController {
     public BaseVO getTagList(@RequestBody TagInfoVO tagInfoVO) {
         BaseVO baseVO = new BaseVO();
         baseVO.setData(customService.getTagList(tagInfoVO));
+        return baseVO;
+    }
+
+    @RequestMapping("/sign")
+    public BaseVO sign(@RequestBody CustomVO customVO) {
+        BaseVO baseVO = new BaseVO();
+        try {
+            customService.sign(customVO);
+        } catch (RunTimeException e) {
+            baseVO.setStatus(e.getCode());
+            baseVO.setMsg(e.getMsg());
+        }
         return baseVO;
     }
 
