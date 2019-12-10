@@ -10,7 +10,7 @@ import java.util.Date;
 @Table(name = "t_ps_recharge_info")
 @EntityListeners(AuditingEntityListener.class)
 public class RechargeInfo extends AbstractEntity {
-    //0时长 1天卡 2周卡 3月卡 4季卡 5半年卡 6年卡 7金额
+    //1时长  2金额 3 天卡
     private String type;
     private Double value;
     //0未使用 1使用中 2已使用

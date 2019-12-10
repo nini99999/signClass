@@ -17,12 +17,14 @@ import com.poshist.signClass.ps.vo.TagInfoVO;
 import com.poshist.signClass.sys.entity.Dictionary;
 import com.poshist.signClass.sys.repository.DictionaryDao;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -50,6 +52,18 @@ public class CustomService {
     private SignInfoDao signInfoDao;
     @Value(("${ps.price}"))
     private Double price;
+
+    @Scheduled(cron = "0 0 * * * ?")
+    private void changeRechargeStatus() {
+        List<RechargeInfo> rechargeInfos = rechargeInfoDao.findByStatusAndType(1, "3");
+        Long now = new Date().getTime();
+        for (RechargeInfo rechargeInfo : rechargeInfos) {
+            if (rechargeInfo.getEndTime().getTime() <= now) {
+                rechargeInfo.setStatus(2);
+                rechargeInfoDao.save(rechargeInfo);
+            }
+        }
+    }
 
     public boolean mobileValid(String mobile) {
         Custom custom = customDao.getFirstByMobile(mobile);
@@ -128,32 +142,76 @@ public class CustomService {
         }
         return tagInfoVOS;
     }
-    public String  sign(CustomVO customVO) throws RunTimeException {
-        Custom custom=customDao.getFirstByMobile(customVO.getMobile());
-        if(null==custom){
-            throw new RunTimeException("1001","用户没有注册");
+
+    public String sign(CustomVO customVO) throws RunTimeException {
+        Custom custom = customDao.getFirstByMobile(customVO.getMobile());
+        if (null == custom) {
+            throw new RunTimeException("1001", "用户没有注册");
         }
-        List<RechargeInfo> rechargeInfos=getValidRecharge(custom);
-        if(rechargeInfos.isEmpty()){
-            throw new RunTimeException("1002","用户没有有效余额");
+        List<RechargeInfo> rechargeInfos = getValidRecharge(custom);
+        if (rechargeInfos.isEmpty()) {
+            throw new RunTimeException("1002", "用户没有有效余额");
         }
-        SignInfo signInfo=signInfoDao.getFirstByCustomAndEndTimeIsNull(custom);
-        Date now =new Date();
+        SignInfo signInfo = signInfoDao.getFirstByCustomAndEndTimeIsNull(custom);
+        Date now = new Date();
         //第一次签到
-        if(null==signInfo){
-            signInfo=new SignInfo();
+        if (null == signInfo) {
+            signInfo = new SignInfo();
             signInfo.setCustom(custom);
             signInfo.setStartTime(now);
-        }else{
+        } else {
             signInfo.setEndTime(now);
-            signInfo.setConsumeTime(Long.valueOf(now.getTime()-signInfo.getStartTime().getTime()/1000));
+            signInfo.setConsumeTime(Long.valueOf(now.getTime() - signInfo.getStartTime().getTime() / 1000));
+            double time = signInfo.getConsumeTime() - (signInfo.getConsumeTime() % 1800);
+            time = time / 3600;
+            boolean enough = false;
+            for (RechargeInfo rechargeInfo : rechargeInfos) {
+                rechargeInfo.setStatus(1);
+                if ("1".equals(rechargeInfo.getType())) {
+                    if (rechargeInfo.getValue() - rechargeInfo.getUsedValue() - time >= 0) {
+                        rechargeInfo.setUsedValue(rechargeInfo.getUsedValue() + time);
+                        if (rechargeInfo.getValue() == rechargeInfo.getUsedValue()) {
+                            rechargeInfo.setStatus(2);
+                        }
+                        enough = true;
+                        rechargeInfoDao.save(rechargeInfo);
+                        break;
+                    }
+                } else if ("2".equals(rechargeInfo.getType())) {
+                    double amt = time * price;
+                    if (rechargeInfo.getValue() - rechargeInfo.getUsedValue() - amt >= 0) {
+                        rechargeInfo.setUsedValue(rechargeInfo.getUsedValue() + amt);
+                        if (rechargeInfo.getValue() == rechargeInfo.getUsedValue()) {
+                            rechargeInfo.setStatus(2);
+                        }
+                        enough = true;
+                        rechargeInfoDao.save(rechargeInfo);
+                        break;
+                    }
+                } else {
+                    if (rechargeInfo.getStartTime() == null) {
+                        rechargeInfo.setStartTime(signInfo.getStartTime());
+                        Date endTime = DateUtils.addDays(signInfo.getStartTime(), Integer.valueOf(rechargeInfo.getValue().toString()));
+                        rechargeInfo.setEndTime(endTime);
+                    }
+                    if (rechargeInfo.getEndTime().getTime() >= signInfo.getEndTime().getTime()) {
+                        enough = true;
+                        break;
+                    }
+
+                }
+            }
+            if (!enough) {
+                throw new RunTimeException("1003", "余额不足");
+            }
+
         }
         return "0000";
     }
 
-    public List<RechargeInfo> getValidRecharge(Custom custom){
-        Integer[] status={0,1};
-        List<RechargeInfo> rechargeInfos=rechargeInfoDao.findByStatusInAndCustomOrderById(status,custom);
-        return  rechargeInfos;
+    public List<RechargeInfo> getValidRecharge(Custom custom) {
+        Integer[] status = {0, 1};
+        List<RechargeInfo> rechargeInfos = rechargeInfoDao.findByStatusInAndCustomOrderById(status, custom);
+        return rechargeInfos;
     }
 }

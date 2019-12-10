@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface RechargeInfoDao   extends CrudRepository<RechargeInfo, Long> {
     List<RechargeInfo> findByStatusInAndCustomOrderById(Integer[] status, Custom custom);
+    List<RechargeInfo> findByStatusAndType(Integer status,String type);
 }
