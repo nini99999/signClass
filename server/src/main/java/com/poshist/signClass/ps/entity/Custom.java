@@ -17,6 +17,8 @@ public class Custom  extends AbstractEntity {
     private Double balance;
     private Double frozen;
     private Date regTime;
+    private String level;
+    private Integer signCount;
     //推荐人
     @OneToOne
     @JoinColumn(name = "recommended_id",referencedColumnName = "id")
@@ -25,6 +27,30 @@ public class Custom  extends AbstractEntity {
     @JoinColumn(name = "source_id",referencedColumnName = "id")
     private Dictionary source;
     private Integer status;
+
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
+    }
+
+    public Integer getSignCount() {
+        return signCount;
+    }
+
+    public void setSignCount(Integer signCount) {
+        this.signCount = signCount;
+    }
+
+    public Dictionary getSource() {
+        return source;
+    }
+
+    public void setSource(Dictionary source) {
+        this.source = source;
+    }
 
     public Custom getRecommended() {
         return recommended;

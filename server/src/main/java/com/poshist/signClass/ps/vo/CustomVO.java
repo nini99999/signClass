@@ -15,12 +15,55 @@ public class CustomVO {
     private Date regTime;
     private Integer status;
     private String recommendedMobile;
-    public CustomVO(){}
-    public CustomVO(Custom custom){
-        BeanUtils.copyProperties(custom,this);
-        if(null!=custom.getRecommended()){
+    private String level;
+    private Integer signCount;
+    private String sourceName;
+    private Long getSourceId;
+
+    public CustomVO() {
+    }
+
+    public CustomVO(Custom custom) {
+        BeanUtils.copyProperties(custom, this);
+        if (null != custom.getRecommended()) {
             setRecommendedMobile(custom.getRecommended().getMobile());
         }
+        if (null != custom.getSource()) {
+            setSourceName(custom.getSource().getName());
+            setGetSourceId(custom.getSource().getId());
+        }
+    }
+
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
+    }
+
+    public Integer getSignCount() {
+        return signCount;
+    }
+
+    public void setSignCount(Integer signCount) {
+        this.signCount = signCount;
+    }
+
+    public String getSourceName() {
+        return sourceName;
+    }
+
+    public void setSourceName(String sourceName) {
+        this.sourceName = sourceName;
+    }
+
+    public Long getGetSourceId() {
+        return getSourceId;
+    }
+
+    public void setGetSourceId(Long getSourceId) {
+        this.getSourceId = getSourceId;
     }
 
     public String getRecommendedMobile() {

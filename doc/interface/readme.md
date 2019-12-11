@@ -401,6 +401,12 @@ sys/initPassword
 | regTime           | Date   | 注册时间          |
 | status            | int    | 状态 0 有效 1无效 |
 | recommendedMobile | String | 推荐人手机号      |
+| level             | String | 用户等级          |
+| signCount         | int    | 消费次数          |
+| sourceName        | String | 来源名称          |
+| sourceId          | Long   | 来源ID            |
+
+
 
 
 
